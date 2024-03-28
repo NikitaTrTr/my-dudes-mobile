@@ -1,4 +1,3 @@
-//TODO Add theming and styling
 import 'package:flutter/material.dart';
 
 class AppTheme {

@@ -8,11 +8,12 @@ import 'map_overlay.dart';
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final Controller controller = Get.put(Controller());
+    Get.put(SlidingUpPanelController());
 
-    return const Scaffold(
-        body: MapOverlay(),
-        bottomNavigationBar: NavigationBarWidget(),
-        resizeToAvoidBottomInset: false,);
+    return Scaffold(
+      body: MapOverlay(),
+      bottomNavigationBar: NavigationBarWidget(),
+      resizeToAvoidBottomInset: false,
+    );
   }
 }

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import '../controllers/controller.dart';
 
 class MeetBottomSheet extends StatefulWidget {
   const MeetBottomSheet({super.key});
@@ -7,6 +10,7 @@ class MeetBottomSheet extends StatefulWidget {
 }
 
 class _MeetBottomSheetState extends State<MeetBottomSheet> {
+  SlidingUpPanelController controller = Get.find();
   bool isMeetBottomSheetOpen = true;
   @override
   Widget build(BuildContext context) {
