@@ -54,7 +54,7 @@ class NavigationBarWidget extends StatelessWidget {
         }
       case 2:
         {
-          Get.put(MeetCreationController(), tag: "meetCreationController");
+          Get.put(MeetCreationController());
           Get.toNamed(MeetCreationLinks.STEP_1);
           break;
         }
