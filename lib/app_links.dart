@@ -1,9 +1,16 @@
 class AppLinks {
-  static const String MAP = '/';
+  static const MAP = '/';
+  static const PROFILE = '/profile';
+}
+
+class AuthLinks {
+  static const LOGIN = '/login';
+  static const REGISTER = '/register';
+  static const REGISTER_STEP_1 = '$REGISTER/step1';
 }
 
 class MeetLinks {
-  static const String BASE = '/meet';
+  static const BASE = '/meet';
 }
 
 class MeetCreationLinks {

@@ -4,19 +4,18 @@ class AppTheme {
   static ThemeData get darkTheme {
     return ThemeData.dark().copyWith(
       searchBarTheme: SearchBarThemeData(
+        padding: const MaterialStatePropertyAll(
+          EdgeInsets.symmetric(horizontal: 13)
+        ),
           shape: MaterialStatePropertyAll(
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
           ),
           backgroundColor: MaterialStatePropertyAll(Color(0xFF363636)),
           surfaceTintColor: MaterialStatePropertyAll(Color(0x00000000)),
           textStyle:
-          MaterialStatePropertyAll(TextStyle(color: Color(0xFF929292)))),
-      textTheme: const TextTheme(
-          bodyMedium: TextStyle(
-            color: Colors.white,
-          )),
+              MaterialStatePropertyAll(TextStyle(color: Color(0xFF929292)))),
       colorScheme: const ColorScheme(
-        primary: Colors.yellow,
+        primary: Colors.orange,
         // Primary color (typically used for buttons, the app bar, etc.),
         // A darker version of the primary color, used for certain elements
         secondary: Colors.greenAccent,
@@ -39,7 +38,7 @@ class AppTheme {
         onError: Colors.white,
         // Color for elements that are on top of the error color
         brightness:
-        Brightness.dark, // Brightness of the color scheme (light or dark)
+            Brightness.dark, // Brightness of the color scheme (light or dark)
       ),
     );
   }
