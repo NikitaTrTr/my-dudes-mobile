@@ -1,31 +1,50 @@
+import 'dart:async';
+
 import 'package:get/get.dart';
-import 'package:mydudes/core/model/meet_data.dart';
-import 'package:mydudes/core/model/short_meet_data.dart';
-import 'package:mydudes/core/model/user.dart';
+import 'package:mydudes/core/model/data/meet_data.dart';
+import 'package:mydudes/core/model/data/user.dart';
 import 'package:mydudes/core/repository/meet_repo_impl.dart';
 import 'package:mydudes/core/repository/user_repo_impl.dart';
 
 class MeetController extends GetxController {
-  Rx<ShortMeetData?> meet = Rx<ShortMeetData?>(null);
+  late int meetId;
 
   Rx<MeetData?> fullMeet = Rx<MeetData?>(null);
 
-  Rx<List<User>?> participants = Rx<List<User>?>(null);
+  RxList<User?> participants = RxList<User?>([]);
+  Timer? _participantsPollTimer;
 
-  Rx<String> link = Rx("");
+  MeetController(int id) {
+    meetId = id;
+  }
 
-  //FIXME
-  Rx<bool> isLoading = true.obs;
-  Rx<bool> participantsLoading = true.obs;
+  @override
+  void onInit() {
+    super.onInit();
+    getFullMeet(meetId);
+    _startPolling();
+  }
+
+  @override
+  void onClose() {
+    _participantsPollTimer?.cancel();
+    super.onClose();
+  }
+
+  void _startPolling() {
+    _participantsPollTimer =
+        Timer.periodic(const Duration(seconds: 10), (timer) async {
+      if (fullMeet.value != null) {
+        getFullMeet(meetId);
+        getParticipants(fullMeet.value!.participants);
+      }
+    });
+  }
+
+  RxMap<String, bool> loadingMap = <String, bool>{}.obs;
 
   final MeetRepoImpl meetRepo = Get.find<MeetRepoImpl>();
   final UserRepoImpl userRepo = Get.find<UserRepoImpl>();
-
-  Future createMeetFromDobro() async {
-    try {
-      meetRepo.createMeetFromDobro(link.value);
-    } finally {}
-  }
 
   Future<User> getUser(String id) async {
     try {
@@ -36,53 +55,43 @@ class MeetController extends GetxController {
 
   Future joinMeet() async {
     try {
-      meetRepo.joinMeet(meet.value!.id);
+      meetRepo.joinMeet(meetId);
     } finally {
-      participants.value = null;
-      fetchUsers(fullMeet.value?.participants ?? []);
+      await getFullMeet(meetId);
+      getParticipants(fullMeet.value!.participants);
     }
-    participants.value = null;
-    fetchUsers(fullMeet.value?.participants ?? []);
   }
 
   Future leaveMeet() async {
     try {
-      meetRepo.leaveMeet(meet.value!.id);
+      meetRepo.leaveMeet(meetId);
     } finally {
-      participants.value = null;
-      fetchUsers(fullMeet.value?.participants ?? []);
+      await getFullMeet(meetId);
+      getParticipants(fullMeet.value!.participants);
     }
-    participants.value = null;
-    fetchUsers(fullMeet.value?.participants ?? []);
   }
 
-  Future fetchUsers(List<String> ids) async {
-    participantsLoading.value = true;
+  Future getParticipants(List<String> ids) async {
+    loadingMap['participants'] = true;
     try {
       List<Future<User>> futures = ids.map((id) => getUser(id)).toList();
       List<User> users = await Future.wait(futures);
-      participants.value = users;
+      participants = users.obs;
     } finally {
-      participantsLoading.value = false;
+      loadingMap['participants'] = false;
     }
   }
 
   Future kickUser(String id) async {
     meetRepo.kickUser(fullMeet.value!.id, id);
-    fetchUsers(fullMeet.value?.participants ?? []);
+    getParticipants(fullMeet.value?.participants ?? []);
   }
 
   Future getFullMeet(int id) async {
-    isLoading.value = true;
     try {
       MeetData meetData = await meetRepo.getMeet(id);
       fullMeet.value = meetData;
     } finally {
-      isLoading.value = false;
     }
-  }
-
-  void setMeet(ShortMeetData meet) {
-    this.meet.value = meet;
   }
 }

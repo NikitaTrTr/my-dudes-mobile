@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'location.dart';
+import '../location.dart';
 
 part 'short_meet_data.g.dart';
 

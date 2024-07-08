@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
@@ -27,14 +28,21 @@ class DioService {
       storage: FileStorage('$appDocPath/.cookies/'),
     );
     _dio.interceptors.addAll([
-      InterceptorsWrapper(
-          onError: (error, errorInterceptorHandler) {},
-          onRequest: (request, requestInterceptorHandler) {
-            requestInterceptorHandler.next(request);
-          },
-          onResponse: (response, responseInterceptorHandler) {
-            responseInterceptorHandler.next(response);
-          }),
+      InterceptorsWrapper(onError: (error, errorInterceptorHandler) {
+        if (kDebugMode) {
+          print(error);
+        }
+      }, onRequest: (request, requestInterceptorHandler) {
+        if (kDebugMode) {
+          print(request);
+        }
+        requestInterceptorHandler.next(request);
+      }, onResponse: (response, responseInterceptorHandler) {
+        if (kDebugMode) {
+          print(response);
+        }
+        responseInterceptorHandler.next(response);
+      }),
       CookieManager(cookieJar)
     ]);
   }

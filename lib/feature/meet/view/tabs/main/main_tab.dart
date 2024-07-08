@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mydudes/controllers/user_controller.dart';
 import 'package:mydudes/feature/map/controller/sliding_up_panel_controller.dart';
 import 'package:mydudes/feature/meet/controller/meet_controller.dart';
 import 'package:mydudes/feature/meet/view/meet_picture.dart';
@@ -7,6 +8,7 @@ import 'package:mydudes/feature/meet/view/meet_picture.dart';
 class MainTabWidget extends StatelessWidget {
   final ScrollController scrollController;
   final MeetController _meetController = Get.find<MeetController>();
+  final UserController _userController = Get.find<UserController>();
 
   MainTabWidget({super.key, required this.scrollController});
 
@@ -66,94 +68,96 @@ class MainTabWidget extends StatelessWidget {
             padding: const EdgeInsets.all(7),
             child: Column(
               children: [
-                SizedBox(
-                    width: double.infinity,
-                    child: Row(
-                      children: [
-                        Expanded(
-                          flex: 2,
-                          child: FloatingActionButton.small(
-                              backgroundColor: Colors.orange,
-                              elevation: 0,
-                              onPressed: () {
-                                _meetController.joinMeet();
-                              },
-                              child: const Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.join_full,
-                                    size: 18,
+                (!_meetController.fullMeet.value!.participants.any(
+                        (element) => _userController.nickname.value == element))
+                    ? SizedBox(
+                        width: double.infinity,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              flex: 2,
+                              child: FloatingActionButton.small(
+                                  backgroundColor: Colors.orange,
+                                  elevation: 0,
+                                  onPressed: () {
+                                    _meetController.joinMeet();
+                                  },
+                                  child: const Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.join_full,
+                                        size: 18,
+                                      ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Text(
+                                        "Вступить",
+                                        style: TextStyle(fontSize: 18),
+                                      )
+                                    ],
+                                  )),
+                            ),
+                          ],
+                        ))
+                    : SizedBox(
+                        width: double.infinity,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              flex: 2,
+                              child: FloatingActionButton.small(
+                                  backgroundColor: const Color(0xFF363636),
+                                  elevation: 0,
+                                  onPressed: () {},
+                                  child: const Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.chat,
+                                        size: 18,
+                                      ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Text(
+                                        "Чат",
+                                        style: TextStyle(fontSize: 18),
+                                      )
+                                    ],
+                                  )),
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: FloatingActionButton.small(
+                                  elevation: 0,
+                                  backgroundColor: const Color(0xFF693636),
+                                  child: const Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.exit_to_app,
+                                        size: 18,
+                                      ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Text(
+                                        "Выйти",
+                                        style: TextStyle(fontSize: 18),
+                                      )
+                                    ],
                                   ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Text(
-                                    "Вступить",
-                                    style: TextStyle(fontSize: 18),
-                                  )
-                                ],
-                              )),
-                        ),
-                      ],
-                    )),
-                SizedBox(
-                    width: double.infinity,
-                    child: Row(
-                      children: [
-                        Expanded(
-                          flex: 2,
-                          child: FloatingActionButton.small(
-                              backgroundColor: const Color(0xFF363636),
-                              elevation: 0,
-                              onPressed: () {},
-                              child: const Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.chat,
-                                    size: 18,
-                                  ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Text(
-                                    "Чат",
-                                    style: TextStyle(fontSize: 18),
-                                  )
-                                ],
-                              )),
-                        ),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: FloatingActionButton.small(
-                              elevation: 0,
-                              backgroundColor: const Color(0xFF693636),
-                              child: const Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.exit_to_app,
-                                    size: 18,
-                                  ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Text(
-                                    "Выйти",
-                                    style: TextStyle(fontSize: 18),
-                                  )
-                                ],
-                              ),
-                              onPressed: () {
-                                _meetController.leaveMeet();
-                              }),
-                        )
-                      ],
-                    )),
+                                  onPressed: () {
+                                    _meetController.leaveMeet();
+                                  }),
+                            )
+                          ],
+                        )),
               ],
             )),
       ],

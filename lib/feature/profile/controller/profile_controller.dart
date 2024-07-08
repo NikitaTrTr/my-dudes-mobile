@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
+import 'package:mydudes/core/model/data/user.dart';
 
-import 'package:mydudes/core/model/user.dart';
 import 'package:mydudes/core/repository/user_repo_impl.dart';
 
 class ProfileController extends GetxController {

@@ -4,8 +4,9 @@ import 'dart:ui';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:get/get.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:mydudes/controllers/user_controller.dart';
 import 'package:mydudes/core/model/location.dart';
-import 'package:mydudes/core/model/short_meet_data.dart';
+import 'package:mydudes/core/model/data/short_meet_data.dart';
 import 'package:mydudes/core/repository/meet_repo_impl.dart';
 
 class GlobalMapController extends GetxController {

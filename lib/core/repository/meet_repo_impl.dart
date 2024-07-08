@@ -2,10 +2,10 @@ import 'package:dio/dio.dart' as dio;
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:mydudes/core/model/location.dart';
-import 'package:mydudes/core/model/meet_data.dart';
-import 'package:mydudes/core/model/short_meet_data.dart';
+import 'package:mydudes/core/model/data/meet_data.dart';
+import 'package:mydudes/core/model/data/short_meet_data.dart';
 import 'package:mydudes/core/repository/meet_repo.dart';
-import 'package:mydudes/feature/meet_creation/create_meet_form_data.dart';
+import 'package:mydudes/core/model/data/create_meet_form_data.dart';
 import 'package:mydudes/services/dio_service.dart';
 
 class MeetRepoImpl extends MeetRepo {
@@ -78,10 +78,12 @@ class MeetRepoImpl extends MeetRepo {
 
   Future joinMeet(int id) async {
     try {
-      await _dioService.dio.put("/api/mydudes/geo/party/join",
+      var response = await _dioService.dio.put("/api/mydudes/geo/party/join",
           options: Options(headers: {"AllowCredentials": true}),
           queryParameters: {"id": id});
+      print(response);
     } on DioException catch (exception) {
+      print(exception);
       throw Exception(exception.message);
     }
   }

@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart' as dio;
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
-import 'package:mydudes/core/model/user.dart';
+import 'package:mydudes/core/model/data/user.dart';
 import 'package:mydudes/services/dio_service.dart';
 
 class UserRepoImpl {

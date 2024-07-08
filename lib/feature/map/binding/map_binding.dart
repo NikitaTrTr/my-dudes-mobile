@@ -8,6 +8,5 @@ class MapBinding extends Bindings {
   void dependencies() {
     Get.put(SlidingUpPanelController());
     Get.put(GlobalMapController());
-    Get.put(MeetController());
   }
 }

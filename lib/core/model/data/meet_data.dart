@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:mydudes/core/model/creator.dart';
+import 'package:mydudes/core/model/data/creator.dart';
 import 'package:mydudes/core/model/location.dart';
 import 'package:mydudes/core/model/meet_visibility.dart';
 
@@ -17,8 +17,11 @@ class MeetData {
   final int limits;
   @JsonKey(toJson: serializeToJson, fromJson: deserializeFromJson)
   final MeetVisibility visibility;
+  final DateTime startTime;
+  final DateTime? endTime;
 
-  MeetData(this.participants, this.limits, this.visibility,
+  MeetData(this.participants, this.limits, this.visibility, this.startTime,
+      this.endTime,
       {required this.id,
       required this.name,
       required this.description,

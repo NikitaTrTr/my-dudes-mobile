@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mydudes/navigation_bar.dart';
+import 'package:mydudes/feature/navigation/navigation_bar.dart';
 import 'map_overlay.dart';
 
 class MapPage extends StatelessWidget {

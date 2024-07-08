@@ -1,10 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:mydudes/core/widget/options_bottomsheet/action.dart';
 import 'package:mydudes/core/widget/options_bottomsheet/options_bottomsheet.dart';
 import 'package:mydudes/feature/meet/controller/meet_controller.dart';
+import 'package:mydudes/feature/meet/controller/meet_tab_controller.dart';
 import 'package:mydudes/feature/meet/view/tabs/main/main_tab.dart';
 import 'package:mydudes/feature/meet/view/tabs/participants/participants_tab.dart';
 import '../../map/controller/sliding_up_panel_controller.dart';
@@ -14,12 +13,13 @@ class MeetPanelWidget extends StatelessWidget {
       Get.find<SlidingUpPanelController>();
   final ScrollController scrollController;
   final MeetController _meetController = Get.find<MeetController>();
+  final MeetTabController _meetTabController = Get.find();
 
   MeetPanelWidget({super.key, required this.scrollController});
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() => _meetController.isLoading.isFalse
+    return Obx(() => _meetController.loadingMap['fullMeet'] == null
         ? Padding(
             padding:
                 const EdgeInsets.only(bottom: 5, left: 3, right: 3, top: 10),
@@ -39,6 +39,8 @@ class MeetPanelWidget extends StatelessWidget {
                                   panelController.switchSlidingUpPanels(
                                       "globalSearchPanel");
                                   panelController.closeSearchPanel();
+                                  Get.delete<MeetController>();
+                                  Get.delete<MeetTabController>();
                                 },
                               ),
                               Column(
@@ -47,7 +49,7 @@ class MeetPanelWidget extends StatelessWidget {
                                   SizedBox(
                                     width: 258,
                                     child: Text(
-                                      _meetController.meet.value?.name ??
+                                      _meetController.fullMeet.value?.name ??
                                           "Без названия",
                                       overflow: TextOverflow.ellipsis,
                                       style: const TextStyle(
@@ -56,7 +58,7 @@ class MeetPanelWidget extends StatelessWidget {
                                     ),
                                   ),
                                   Text(
-                                    "Пирогова, 18 ${_meetController.meet.value?.time.startTime != null ? "· ${getTime(_meetController.meet.value!.time.startTime)}" : ""} · ID:${_meetController.meet.value!.id}",
+                                    "Пирогова, 18 ${_meetController.fullMeet.value?.startTime != null ? "· ${getTime(_meetController.fullMeet.value!.startTime)}" : ""} · ID:${_meetController.meetId}",
                                     style: const TextStyle(
                                         color: Color(0xFFA9A9A9)),
                                   )
@@ -75,53 +77,53 @@ class MeetPanelWidget extends StatelessWidget {
                   )
                 ],
               ),
-              DefaultTabController(
-                  length: 4,
-                  child: Column(
-                    children: [
-                      TabBar(
-                        dividerHeight: 0,
-                        tabs: [
-                          Tab(
-                            icon: Icon(Icons.home_outlined),
-                          ),
-                          Tab(
-                            icon: Icon(Icons.people_outline),
-                          ),
-                          Tab(
-                            icon: Icon(Icons.map_outlined),
-                          ),
-                          Tab(
-                            icon: Icon(Icons.settings_outlined),
-                          ),
-                        ],
+              Column(
+                children: [
+                  TabBar(
+                    controller: _meetTabController.tabController,
+                    dividerHeight: 0,
+                    tabs: [
+                      Tab(
+                        icon: Icon(Icons.home_outlined),
                       ),
-                      Container(
-                        height: MediaQuery.of(context).size.height * 0.658,
-                        // Set a height for the TabBarView
-                        child: TabBarView(
-                          children: [
-                            // Your TabBarView children
-                            MainTabWidget(scrollController: scrollController),
-                            ParticipantsTabWidget(
-                                scrollController: scrollController),
-                            ListView.builder(
-                                itemBuilder: (BuildContext context, int index) {
-                              return const ListTile(
-                                title: Text("Hello"),
-                              );
-                            }),
-                            ListView.builder(
-                                itemBuilder: (BuildContext context, int index) {
-                              return const ListTile(
-                                title: Text("Hello"),
-                              );
-                            }),
-                          ],
-                        ),
+                      Tab(
+                        icon: Icon(Icons.people_outline),
+                      ),
+                      Tab(
+                        icon: Icon(Icons.map_outlined),
+                      ),
+                      Tab(
+                        icon: Icon(Icons.settings_outlined),
                       ),
                     ],
-                  ))
+                  ),
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.658,
+                    // Set a height for the TabBarView
+                    child: TabBarView(
+                      controller: _meetTabController.tabController,
+                      children: [
+                        // Your TabBarView children
+                        MainTabWidget(scrollController: scrollController),
+                        ParticipantsTabWidget(
+                            scrollController: scrollController),
+                        ListView.builder(
+                            itemBuilder: (BuildContext context, int index) {
+                          return const ListTile(
+                            title: Text("Hello"),
+                          );
+                        }),
+                        ListView.builder(
+                            itemBuilder: (BuildContext context, int index) {
+                          return const ListTile(
+                            title: Text("Hello"),
+                          );
+                        }),
+                      ],
+                    ),
+                  ),
+                ],
+              )
             ]),
           )
         : const Positioned(

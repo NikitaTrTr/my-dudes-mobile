@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mydudes/feature/meet/controller/meet_controller.dart';
 import 'package:mydudes/feature/meet/view/tabs/participants/participant.dart';
+import 'package:mydudes/feature/meet/view/tabs/participants/participants_list.dart';
 
 class ParticipantsTabWidget extends StatelessWidget {
   final ScrollController scrollController;
@@ -12,30 +13,24 @@ class ParticipantsTabWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      if (_meetController.participants.value == null) {
-        _meetController
-            .fetchUsers(_meetController.fullMeet.value?.participants ?? []);
-      }
       return Stack(children: [
-        if (_meetController.participants.value != null)
-          ListView(
-              padding: const EdgeInsets.symmetric(vertical: 0),
-              controller: scrollController,
-              children: _addDividers(_meetController.participants.value!
-                  .map((e) => Participant(
-                        image: Image.asset("assets/images/miqqra.png"),
-                        name: "${e.firstName} ${e.lastName}",
-                        id: e.nickname,
-                      ))
-                  .toList()))
-        else
-          const Center(child: CircularProgressIndicator())
+        ParticipantsList(_meetController.fullMeet.value?.participants ?? [], scrollController)
+        // ListView(
+        //     padding: const EdgeInsets.symmetric(vertical: 0),
+        //     controller: scrollController,
+        //     children: _addDividers(_meetController.participants
+        //         .map((e) => Participant(
+        //               image: Image.asset("assets/images/miqqra.png"),
+        //               name: "${e?.firstName} ${e?.lastName}",
+        //               id: e!.nickname,
+        //             ))
+        //         .toList()))
       ]);
     });
   }
 
   List<Widget> _addDividers(List<Widget> widgets) {
-    return widgets
+    List<Widget> dividedWidgets = widgets
         .expand((element) => [
               element,
               const Divider(
@@ -44,5 +39,9 @@ class ParticipantsTabWidget extends StatelessWidget {
               )
             ])
         .toList();
+    if (dividedWidgets.isNotEmpty) {
+      dividedWidgets.removeLast();
+    }
+    return dividedWidgets;
   }
 }

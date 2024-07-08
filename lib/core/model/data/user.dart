@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:json_annotation/json_annotation.dart';
-import 'package:mydudes/core/model/creator.dart';
+import 'package:mydudes/core/model/data/creator.dart';
 
 part "user.g.dart";
 
