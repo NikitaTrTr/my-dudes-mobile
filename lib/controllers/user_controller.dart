@@ -6,4 +6,8 @@ class UserController extends GetxController {
   void setNickname(String nickname) {
     this.nickname.value = nickname;
   }
+
+  String getUserNickname() {
+    return nickname.value;
+  }
 }

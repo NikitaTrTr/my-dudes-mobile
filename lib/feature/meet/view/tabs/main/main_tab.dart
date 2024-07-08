@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mydudes/controllers/user_controller.dart';
-import 'package:mydudes/feature/map/controller/sliding_up_panel_controller.dart';
 import 'package:mydudes/feature/meet/controller/meet_controller.dart';
 import 'package:mydudes/feature/meet/view/meet_picture.dart';
 
@@ -68,8 +67,8 @@ class MainTabWidget extends StatelessWidget {
             padding: const EdgeInsets.all(7),
             child: Column(
               children: [
-                (!_meetController.fullMeet.value!.participants.any(
-                        (element) => _userController.nickname.value == element))
+                (!_meetController.isUserInParticipants(
+                        _userController.getUserNickname()))
                     ? SizedBox(
                         width: double.infinity,
                         child: Row(

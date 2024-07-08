@@ -82,6 +82,13 @@ class MeetController extends GetxController {
     }
   }
 
+  bool isUserInParticipants(String nickname) {
+    if (fullMeet.value != null) {
+      return fullMeet.value!.participants.any((element) => nickname == element);
+    }
+    return false;
+  }
+
   Future kickUser(String id) async {
     meetRepo.kickUser(fullMeet.value!.id, id);
     getParticipants(fullMeet.value?.participants ?? []);
